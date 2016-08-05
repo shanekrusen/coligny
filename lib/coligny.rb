@@ -157,8 +157,12 @@ module Coligny
         
         if test_intone_metonic
           @months.unshift(ColignyMonth.new("Intercalary One", 29))
-        elsif test_inttwo_metonic && !((@working_year - 2016) % 6569 <= 4)
+        elsif test_inttwo_metonic
           @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+        end
+        
+        if ((@working_year - 2016) % 6569 <= 4) && ((@working_year - 2016) >= 6569) && (@month[6].name = "Intercalary Two")
+          @months.delete_at(6)
         end
       end
     end
