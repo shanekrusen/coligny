@@ -1,5 +1,7 @@
 # Coligny
 
+[![Build Status](https://travis-ci.org/shanekrusen/coligny.svg?branch=master)](https://travis-ci.org/shanekrusen/coligny)
+
 Welcome!
 Swáel!
 
