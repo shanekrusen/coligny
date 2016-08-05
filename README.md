@@ -22,8 +22,6 @@ Or install it yourself as:
     $ gem install coligny
 
 ## Usage
-**The earliest available date is April 26th, 2015. I can not guarantee that any earlier dates will function properly**
-
 The main functionality of this project is the conversion of dates to and from the Coligny Calendar.
 To convert a Gregorian date to Coligny:
 
