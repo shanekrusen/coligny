@@ -227,15 +227,9 @@ module Coligny
       end
     end
     
-    def metonic_earlier_than_start_date_to_gregorian      
-      end_date = ColignyDate.new(3035, "Samonios", 1, true)
-      
-      return Date.new(2016, 5, 14) - earlier_check(end_date)
-    end
-    
-    def earlier_check(check_date)
+    def earlier_check(check_date) 
       day_count = 0
-      
+           
       until self.month.name == check_date.month.name && self.day == check_date.day && self.year == check_date.year
         self.calc_days(1)
         day_count += 1
@@ -244,15 +238,9 @@ module Coligny
       return day_count
     end
     
-    def metonic_later_than_start_date_to_gregorian      
-      start = ColignyDate.new(3035, "Samonios", 1, true)
-      
-      return Date.new(2016, 5, 14) + later_check(start)
-    end
-    
     def later_check(check_date)
       day_count = 0
-      
+            
       until check_date.month.name == self.month.name && check_date.day == self.day && check_date.year == self.year
         check_date.calc_days(1)
         day_count += 1
@@ -261,35 +249,23 @@ module Coligny
       return day_count
     end
     
-    def metonic_gregorian      
-      if @year < 3035
-        metonic_earlier_than_start_date_to_gregorian
+    def metonic_gregorian
+      start = ColignyDate.new(3035, "Samonios", 1, true)
+            
+      if (@year < 3035)
+        return Date.new(2016, 5, 14) - earlier_check(start)
       else
-        metonic_later_than_start_date_to_gregorian
+        return Date.new(2016, 5, 14) + later_check(start)
       end
     end
     
-    def saturn_earlier_than_start_date_to_gregorian
-      day_count = 0
-      
-      end_date = ColignyDate.new(3034, "Intercalary One", 1)
-      
-      return Date.new(2015, 4, 26) - earlier_check(end_date)
-    end
-    
-    def saturn_later_than_start_date_to_gregorian
-      day_count = 0
-      
+    def saturn_gregorian 
       start = ColignyDate.new(3034, "Intercalary One", 1)
-      
-      return Date.new(2015, 4, 26) + later_check(start)
-    end
-    
-    def saturn_gregorian           
-      if (@year < 3034)
-        saturn_earlier_than_start_date_to_gregorian
+                
+      if (@year < 3034)        
+        return Date.new(2015, 4, 26) - earlier_check(start)
       else
-        saturn_later_than_start_date_to_gregorian
+        return Date.new(2015, 4, 26) + later_check(start)
       end 
     end
   
