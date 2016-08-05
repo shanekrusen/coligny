@@ -183,85 +183,103 @@ module Coligny
       @month = @months.find { |s| s.name == month }
     end
     
+    def days_exceed_over
+      if @months[@months.index(@month) + 1].nil?
+        @day = @day - @month.days
+        @year += 1
+        if @is_metonic
+          @months = ColignyYear.new(@year, true).months
+        else
+          @months = ColignyYear.new(@year).months
+        end
+        @month = @months[0]
+      else
+        @day = @day - @month.days
+        @month = @months[@months.index(@month) + 1]
+      end
+    end
+    
+    def days_exceed_under
+      if @month == @months[0]
+        @year -= 1
+        if @is_metonic
+          @months = ColignyYear.new(@year, true).months
+        else
+          @months = ColignyYear.new(@year).months
+        end
+        @month = @months[-1]
+        @day = @month.days + (@day)
+      else
+        @month = @months[@months.index(@month) - 1]
+        @day = @month.days + (@day)
+      end
+    end
+    
     def calc_days(add)
       @day += add
       
       while @day > @month.days
-        if @months[@months.index(@month) + 1].nil?
-          @day = @day - @month.days
-          @year += 1
-          if @is_metonic
-            @months = ColignyYear.new(@year, true).months
-          else
-            @months = ColignyYear.new(@year).months
-          end
-          @month = @months[0]
-        else
-          @day = @day - @month.days
-          @month = @months[@months.index(@month) + 1]
-        end
+        days_exceed_over
       end
       
       while @day < 1
-        if @month == @months[0]
-          @year -= 1
-          if @is_metonic
-            @months = ColignyYear.new(@year, true).months
-          else
-            @months = ColignyYear.new(@year).months
-          end
-          @month = @months[-1]
-          @day = @month.days + (@day)
-        else
-          @month = @months[@months.index(@month) - 1]
-          @day = @month.days + (@day)
-        end
+        days_exceed_under
       end
     end
-  
-    def to_gregorian_date
+    
+    def metonic_gregorian
       day_count = 0
       
-      if @is_metonic
-        if @year < 3035
-          end_date = ColignyDate.new(3035, "Samonios", 1, true)
-          
-          until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
-            self.calc_days(1)
-            day_count += 1
-          end
-          
-          return Date.new(2016, 5, 14) - day_count
-        else
-          start = ColignyDate.new(3035, "Samonios", 1, true)
-          
-          until start.month.name == self.month.name && start.day == self.day && start.year == self.year
-            start.calc_days(1)
-            day_count += 1
-          end
-          
-          return Date.new(2016, 5, 14) + day_count
+      if @year < 3035
+        end_date = ColignyDate.new(3035, "Samonios", 1, true)
+        
+        until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
+          self.calc_days(1)
+          day_count += 1
         end
+        
+        return Date.new(2016, 5, 14) - day_count
       else
-        if (@year < 3034)
-          end_date = ColignyDate.new(3034, "Intercalary One", 1)
-          
-          until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
-            self.calc_days(1)
-            day_count += 1
-          end
-          
-          return Date.new(2015, 4, 26) - day_count
-        else
-          start = ColignyDate.new(3034, "Intercalary One", 1)
-          
-          until start.month.name == self.month.name && start.day == self.day && start.year == self.year
-            start.calc_days(1)
-            day_count += 1
-          end
-          
-          return Date.new(2015, 4, 26) + day_count
-        end 
+        start = ColignyDate.new(3035, "Samonios", 1, true)
+        
+        until start.month.name == self.month.name && start.day == self.day && start.year == self.year
+          start.calc_days(1)
+          day_count += 1
+        end
+        
+        return Date.new(2016, 5, 14) + day_count
+      end
+    end
+    
+    def saturn_gregorian
+      day_count = 0
+            
+      if (@year < 3034)
+        end_date = ColignyDate.new(3034, "Intercalary One", 1)
+        
+        until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
+          self.calc_days(1)
+          day_count += 1
+        end
+        
+        return Date.new(2015, 4, 26) - day_count
+      else
+        start = ColignyDate.new(3034, "Intercalary One", 1)
+        
+        until start.month.name == self.month.name && start.day == self.day && start.year == self.year
+          start.calc_days(1)
+          day_count += 1
+        end
+        
+        return Date.new(2015, 4, 26) + day_count
+      end 
+    end
+  
+    def to_gregorian_date   
+      if @is_metonic
+        metonic_gregorian
+      else
+        saturn_gregorian
       end      
     end
   end
