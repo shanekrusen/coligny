@@ -5,6 +5,12 @@ Swáel!
 
 This gem is intended to provide a resource for the use of the Coligny Calendar, according to its alignment by Helen McKay, in the Ruby Language. 
 
+##To-DO
+
+- Finish long-term adjustments for slippage.
+- Add Inscriptions for dates
+- Comments
+
 ## Installation
 
 Add this line to your application's Gemfile:
