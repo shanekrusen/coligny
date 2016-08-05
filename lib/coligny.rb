@@ -227,37 +227,45 @@ module Coligny
       end
     end
     
-    def metonic_earlier_than_start_date_to_gregorian
+    def metonic_earlier_than_start_date_to_gregorian      
+      end_date = ColignyDate.new(3035, "Samonios", 1, true)
+      
+      return Date.new(2016, 5, 14) - earlier_check(end_date)
+    end
+    
+    def earlier_check(check_date)
       day_count = 0
       
-      end_date = ColignyDate.new(3035, "Samonios", 1, true)
-        
-      until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
+      until self.month.name == check_date.month.name && self.day == check_date.day && self.year == check_date.year
         self.calc_days(1)
         day_count += 1
       end
       
-      return Date.new(2016, 5, 14) - day_count
+      return day_count
     end
     
-    def metonic_later_than_start_date_to_gregorian
+    def metonic_later_than_start_date_to_gregorian      
+      start = ColignyDate.new(3035, "Samonios", 1, true)
+      
+      return Date.new(2016, 5, 14) + later_check(start)
+    end
+    
+    def later_check(check_date)
       day_count = 0
       
-      start = ColignyDate.new(3035, "Samonios", 1, true)
-        
-      until start.month.name == self.month.name && start.day == self.day && start.year == self.year
-        start.calc_days(1)
+      until check_date.month.name == self.month.name && check_date.day == self.day && check_date.year == self.year
+        check_date.calc_days(1)
         day_count += 1
       end
       
-      return Date.new(2016, 5, 14) + day_count
+      return day_count
     end
     
     def metonic_gregorian      
       if @year < 3035
         metonic_earlier_than_start_date_to_gregorian
       else
-        
+        metonic_later_than_start_date_to_gregorian
       end
     end
     
@@ -266,25 +274,15 @@ module Coligny
       
       end_date = ColignyDate.new(3034, "Intercalary One", 1)
       
-      until self.month.name == end_date.month.name && self.day == end_date.day && self.year == end_date.year
-        self.calc_days(1)
-        day_count += 1
-      end
-      
-      return Date.new(2015, 4, 26) - day_count
+      return Date.new(2015, 4, 26) - earlier_check(end_date)
     end
     
     def saturn_later_than_start_date_to_gregorian
       day_count = 0
       
       start = ColignyDate.new(3034, "Intercalary One", 1)
-        
-      until start.month.name == self.month.name && start.day == self.day && start.year == self.year
-        start.calc_days(1)
-        day_count += 1
-      end
       
-      return Date.new(2015, 4, 26) + day_count
+      return Date.new(2015, 4, 26) + later_check(start)
     end
     
     def saturn_gregorian           
