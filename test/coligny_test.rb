@@ -31,4 +31,11 @@ class ColignyTest < Minitest::Test
     year = Coligny::ColignyDate.new(3061, "Cantlos", 29).to_gregorian_date
     assert_equal Date.new(2043, 5, 15), year
   end
+  
+  def test_saturn_early_to_coligny
+    year = Date.new(2015, 3, 27).to_coligny_date
+    assert_equal 3033, year.year
+    assert_equal 30, year.day
+    assert_equal "Aedrinni", year.month.name
+  end
 end
