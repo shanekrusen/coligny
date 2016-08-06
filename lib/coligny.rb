@@ -29,6 +29,7 @@ module Coligny
     attr_accessor :months, :days 
     
     def initialize(year, is_metonic=false)
+      @is_metonic = is_metonic
       @year = year
       @working_year = Coligny.to_ce(@year)    
       @months = [ColignyMonth.new("Samonios", 30), 
@@ -51,6 +52,16 @@ module Coligny
     end
     
     private
+    
+    def is_early
+      if @is_metonic
+        return true if (@year < 3035)
+        return false
+      else
+        return true if (@year < 3034)
+        return false
+      end
+    end
     
     def populate_saturn_earlier_equos
       if ((2015 - @working_year) % 5 == 1) || ((2015 - @working_year) % 5 == 0)
@@ -168,6 +179,18 @@ module Coligny
       if test_intone_metonic
         @months.unshift(ColignyMonth.new("Intercalary One", 29))
       elsif test_inttwo_metonic
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end
+    end
+    
+    def populate_metonic_int1
+      if (is_early && test_earlier_than_start_date_intone_metonic) || (!is_early && test_intone_metonic)
+        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+      end      
+    end
+    
+    def populate_metonic_int2
+      if (is_early && test_earlier_than_start_date_inttwo_metonic) || (!is_early && test_inttwo_metonic)
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
