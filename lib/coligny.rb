@@ -52,32 +52,45 @@ module Coligny
     
     private
     
-    def populate_saturn_months
-      
-      if (@year < 3034)
-        if ((2015 - @working_year) % 5 == 1) || ((2015 - @working_year) % 5 == 0)
-          @months.insert(8, ColignyMonth.new("Equos", 30))
-        else
-          @months.insert(8, ColignyMonth.new("Equos", 29))
-        end
-        
-        if ((2015 - @working_year) % 5 == 0) && ((2015 - @working_year) % 30 != 5)
-          @months.unshift(ColignyMonth.new("Intercalary One", 29))
-        elsif ((2015 - @working_year) % 5 == 3)
-          @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
-        end
+    def populate_saturn_earlier_equos
+      if ((2015 - @working_year) % 5 == 1) || ((2015 - @working_year) % 5 == 0)
+        @months.insert(8, ColignyMonth.new("Equos", 30))
       else
-        if ((@working_year - 2015) % 5 == 0) || ((@working_year - 2015) % 5 == 4)
-          @months.insert(8, ColignyMonth.new("Equos", 30))
-        else
-          @months.insert(8, ColignyMonth.new("Equos", 29))
-        end
-        
-        if ((@working_year - 2015) % 5 == 0) 
-          @months.unshift(ColignyMonth.new("Intercalary One", 29))
-        elsif ((@working_year - 2015) % 5 == 2) && ((@working_year - 2015) % 30 != 27)
-          @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
-        end
+        @months.insert(8, ColignyMonth.new("Equos", 29))
+      end
+    end
+    
+    def populate_saturn_earlier_int
+      if ((2015 - @working_year) % 5 == 0) && ((2015 - @working_year) % 30 != 5)
+        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+      elsif ((2015 - @working_year) % 5 == 3)
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end
+    end
+    
+    def populate_saturn_later_equos
+      if ((@working_year - 2015) % 5 == 0) || ((@working_year - 2015) % 5 == 4)
+        @months.insert(8, ColignyMonth.new("Equos", 30))
+      else
+        @months.insert(8, ColignyMonth.new("Equos", 29))
+      end
+    end
+    
+    def populate_saturn_later_int
+      if ((@working_year - 2015) % 5 == 0) 
+        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+      elsif ((@working_year - 2015) % 5 == 2) && ((@working_year - 2015) % 30 != 27)
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end
+    end
+      
+    def populate_saturn_months      
+      if (@year < 3034)
+        populate_saturn_earlier_equos
+        populate_saturn_earlier_int
+      else        
+        populate_saturn_later_equos
+        populate_saturn_later_int
       end
     end
     
@@ -135,35 +148,52 @@ module Coligny
       earlier_than_start_date_test_cases(cases)
     end
     
-    def populate_metonic_months
-      if @year < 3035
-        if test_earlier_than_start_equos_days_metonic
-          @months.insert(8, ColignyMonth.new("Equos", 30))
-        else
-          @months.insert(8, ColignyMonth.new("Equos", 29))
-        end
-        
-        if test_earlier_than_start_date_intone_metonic
-          @months.unshift(ColignyMonth.new("Intercalary One", 29))
-        elsif test_earlier_than_start_date_inttwo_metonic
-          @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
-        end
+    def populate_metonic_earlier_equos
+      if test_earlier_than_start_equos_days_metonic
+        @months.insert(8, ColignyMonth.new("Equos", 30))
       else
-        if test_equos_days_metonic
-          @months.insert(8, ColignyMonth.new("Equos", 30))
-        else
-          @months.insert(8, ColignyMonth.new("Equos", 29))
-        end
-        
-        if test_intone_metonic
-          @months.unshift(ColignyMonth.new("Intercalary One", 29))
-        elsif test_inttwo_metonic
-          @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
-        end
-        
-        if ((@working_year - 2016) % 6569 <= 4) && ((@working_year - 2016) >= 6569) && (@month[6].name = "Intercalary Two")
-          @months.delete_at(6)
-        end
+        @months.insert(8, ColignyMonth.new("Equos", 29))
+      end
+    end
+    
+    def populate_metonic_earlier_int
+      if test_earlier_than_start_date_intone_metonic
+        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+      elsif test_earlier_than_start_date_inttwo_metonic
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end
+    end
+    
+    def populate_metonic_later_equos
+      if test_equos_days_metonic
+        @months.insert(8, ColignyMonth.new("Equos", 30))
+      else
+        @months.insert(8, ColignyMonth.new("Equos", 29))
+      end
+    end
+    
+    def populate_metonic_later_int
+      if test_intone_metonic
+        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+      elsif test_inttwo_metonic
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end
+    end
+    
+    def metonic_longcycle_int2_check
+      if ((@working_year - 2016) % 6569 <= 4) && ((@working_year - 2016) >= 6569) && (@month[6].name = "Intercalary Two")
+        @months.delete_at(6)
+      end
+    end
+    
+    def populate_metonic_months
+      if @year < 3035        
+        populate_metonic_earlier_equos
+        populate_metonic_earlier_int
+      else
+        populate_metonic_later_equos     
+        populate_metonic_later_int
+        metonic_longcycle_int2_check        
       end
     end
   end
