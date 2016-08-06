@@ -1,4 +1,4 @@
-require "coligny/version"
+require "./lib/coligny/version"
 
 module Coligny
   require 'date'
@@ -188,7 +188,7 @@ module Coligny
     def populate_metonic_months
       populate_metonic_equos
       populate_metonic_int1
-      populate_metonic_int1
+      populate_metonic_int2
       
       if @year >= 3035             
         metonic_longcycle_int2_check        
