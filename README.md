@@ -129,5 +129,6 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## Credit
 
 Developer - Shane Krusen
+
 The model of the Coligny Calendar used for this project is the product of the work of the brilliant and lovely Helen McKay.
 Support and feedback from the Modern Gaulish Community, Steve Hansen, Helen McKay, and my mentor, Klint Thrasher.
