@@ -99,7 +99,7 @@ module Coligny
     end
       
     def populate_saturn_months      
-      if (@year < 3034)
+      if is_early
         populate_saturn_earlier_equos
         populate_saturn_earlier_int
       else        
@@ -163,7 +163,7 @@ module Coligny
     end
     
     def populate_metonic_equos
-      if ((@year < 3035) && (test_earlier_than_start_equos_days_metonic)) || ((@year >= 3035) && (test_equos_days_metonic))
+      if (is_early && (test_earlier_than_start_equos_days_metonic)) || (!is_early && (test_equos_days_metonic))
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
