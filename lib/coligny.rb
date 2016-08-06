@@ -1,3 +1,6 @@
+# Copyright 2016 @shanekrusen 
+# License MIT (https://opensource.org/licenses/MIT)
+
 require "./lib/coligny/version"
 
 module Coligny
