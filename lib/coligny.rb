@@ -180,8 +180,14 @@ module Coligny
     end
     
     def metonic_longcycle_int2_check
-      if ((@working_year - 2016) % 6569 <= 4) && ((@working_year - 2016) >= 6569) && (@month[6].name = "Intercalary Two")
+      if ((@working_year - 2016) % 6569 <= 4) && ((@working_year - 2016) >= 6569) && (@months[6].name = "Intercalary Two")
         @months.delete_at(6)
+      end
+    end
+    
+    def metonic_longcycle_equos_check
+      if ((@working_year - 2016) % 61 <= 4) && ((@working_year - 2016) >= 61) && ((@working_year - 2016) % 5 == 4)
+        @months.find { |s| s.name == "Equos" }.days = 29
       end
     end
     
@@ -191,7 +197,8 @@ module Coligny
       populate_metonic_int2
       
       if @year >= 3035             
-        metonic_longcycle_int2_check        
+        metonic_longcycle_int2_check 
+        metonic_longcycle_equos_check       
       end
     end
   end
