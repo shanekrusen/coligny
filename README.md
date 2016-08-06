@@ -1,6 +1,6 @@
 # Coligny
 
-[![Build Status](https://travis-ci.org/shanekrusen/coligny.svg?branch=master)](https://travis-ci.org/shanekrusen/coligny) [![Code Climate](https://codeclimate.com/github/shanekrusen/coligny/badges/gpa.svg)](https://codeclimate.com/github/shanekrusen/coligny)
+[![Gem Version](https://badge.fury.io/rb/coligny.svg)](https://badge.fury.io/rb/coligny) [![Build Status](https://travis-ci.org/shanekrusen/coligny.svg?branch=master)](https://travis-ci.org/shanekrusen/coligny) [![Code Climate](https://codeclimate.com/github/shanekrusen/coligny/badges/gpa.svg)](https://codeclimate.com/github/shanekrusen/coligny)
 
 Welcome!
 Swáel!
