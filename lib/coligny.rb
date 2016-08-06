@@ -176,8 +176,12 @@ module Coligny
       @year = year
       @day = day
       if @is_metonic
+        @start_year = 3035
+        @start_date = Date.new(2016, 5, 14)
         @months = ColignyYear.new(year, true).months
       else
+        @start_year = 3034
+        @start_date = Date.new(2015, 4, 26)
         @months = ColignyYear.new(year).months
       end
       @month = @months.find { |s| s.name == month }
@@ -248,33 +252,19 @@ module Coligny
       
       return day_count
     end
-    
-    def metonic_gregorian
-      start = ColignyDate.new(3035, "Samonios", 1, true)
-            
-      if (@year < 3035)
-        return Date.new(2016, 5, 14) - earlier_check(start)
-      else
-        return Date.new(2016, 5, 14) + later_check(start)
-      end
-    end
-    
-    def saturn_gregorian 
-      start = ColignyDate.new(3034, "Intercalary One", 1)
-                
-      if (@year < 3034)        
-        return Date.new(2015, 4, 26) - earlier_check(start)
-      else
-        return Date.new(2015, 4, 26) + later_check(start)
-      end 
-    end
   
     def to_gregorian_date   
       if @is_metonic
-        metonic_gregorian
+        start = ColignyDate.new(3035, "Samonios", 1, true)
       else
-        saturn_gregorian
-      end      
+        start = ColignyDate.new(3034, "Intercalary One", 1)
+      end  
+      
+      if (@year < @start_year)
+        return @start_date - earlier_check(start)
+      else
+        return @start_date + later_check(start)
+      end    
     end
   end
   
