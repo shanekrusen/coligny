@@ -148,8 +148,8 @@ module Coligny
       earlier_than_start_date_test_cases(cases)
     end
     
-    def populate_metonic_earlier_equos
-      if test_earlier_than_start_equos_days_metonic
+    def populate_metonic_equos
+      if ((@year < 3035) && (test_earlier_than_start_equos_days_metonic)) || ((@year >= 3035) && (test_equos_days_metonic))
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
@@ -161,14 +161,6 @@ module Coligny
         @months.unshift(ColignyMonth.new("Intercalary One", 29))
       elsif test_earlier_than_start_date_inttwo_metonic
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
-      end
-    end
-    
-    def populate_metonic_later_equos
-      if test_equos_days_metonic
-        @months.insert(8, ColignyMonth.new("Equos", 30))
-      else
-        @months.insert(8, ColignyMonth.new("Equos", 29))
       end
     end
     
@@ -187,11 +179,11 @@ module Coligny
     end
     
     def populate_metonic_months
+      populate_metonic_equos
+      
       if @year < 3035        
-        populate_metonic_earlier_equos
         populate_metonic_earlier_int
-      else
-        populate_metonic_later_equos     
+      else     
         populate_metonic_later_int
         metonic_longcycle_int2_check        
       end
