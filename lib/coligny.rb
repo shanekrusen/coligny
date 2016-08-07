@@ -18,6 +18,7 @@ module Coligny
   
   class ColignyYear
     attr_accessor :months, :days 
+    attr_reader :is_early
     
     def initialize(year, is_metonic=false)
       @is_metonic = is_metonic
