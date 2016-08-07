@@ -120,19 +120,19 @@ module Coligny
     def test_equos_days_metonic
       cases = [3,4,8,9,13,14,18]
       
-      test_against_cases(cases)
+      return test_against_cases(cases)
     end
     
     def test_intone_metonic
       cases = [4,9,14]
       
-      test_against_cases(cases)
+      return test_against_cases(cases)
     end
     
     def test_inttwo_metonic
       cases = [1,6,11,16]
       
-      test_against_cases(cases)
+      return test_against_cases(cases)
     end
     
     def earlier_than_start_date_test_cases(cases)
@@ -147,19 +147,19 @@ module Coligny
     def test_earlier_than_start_equos_days_metonic
       cases = [1,5,6,10,11,15,16]
       
-      earlier_than_start_date_test_cases(cases)
+      return earlier_than_start_date_test_cases(cases)
     end
     
     def test_earlier_than_start_date_intone_metonic
       cases = [5,10,15]
       
-      earlier_than_start_date_test_cases(cases)
+      return earlier_than_start_date_test_cases(cases)
     end
     
     def test_earlier_than_start_date_inttwo_metonic
       cases = [3,8,13,18]
       
-      earlier_than_start_date_test_cases(cases)
+      return earlier_than_start_date_test_cases(cases)
     end
     
     def populate_metonic_equos
