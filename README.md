@@ -1,6 +1,6 @@
 # Coligny
 
-[![Gem Version](https://badge.fury.io/rb/coligny.svg)](https://badge.fury.io/rb/coligny) [![Build Status](https://travis-ci.org/shanekrusen/coligny.svg?branch=master)](https://travis-ci.org/shanekrusen/coligny) [![Code Climate](https://codeclimate.com/github/shanekrusen/coligny/badges/gpa.svg)](https://codeclimate.com/github/shanekrusen/coligny) [![Test Coverage](https://codeclimate.com/github/shanekrusen/coligny/badges/coverage.svg)](https://codeclimate.com/github/shanekrusen/coligny/coverage)
+[![Gem Version](https://badge.fury.io/rb/coligny.svg)](https://badge.fury.io/rb/coligny) [![Build Status](https://travis-ci.org/shanekrusen/coligny.svg?branch=master)](https://travis-ci.org/shanekrusen/coligny) [![Code Climate](https://codeclimate.com/github/shanekrusen/coligny/badges/gpa.svg)](https://codeclimate.com/github/shanekrusen/coligny) [![Test Coverage](https://codeclimate.com/github/shanekrusen/coligny/badges/coverage.svg)](https://codeclimate.com/github/shanekrusen/coligny/coverage) [![Dependency Status](https://gemnasium.com/badges/github.com/shanekrusen/coligny.svg)](https://gemnasium.com/github.com/shanekrusen/coligny)
 
 Welcome!
 Swáel!
@@ -9,7 +9,7 @@ This gem is intended to provide a resource for the use of the Coligny Calendar, 
 
 ##To-DO
 
-- Finish long-term adjustments for slippage.
+- Refactor populate methods for 30-year cycle
 - Add Inscriptions for dates
 - Comments
 
