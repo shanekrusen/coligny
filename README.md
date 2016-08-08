@@ -9,6 +9,7 @@ This gem is intended to provide a resource for the use of the Coligny Calendar, 
 
 ##To-DO
 
+- Finish long-cycle checks for dates earlier than cycle start dates.
 - Refactor populate methods for 30-year cycle
 - Add Inscriptions for dates
 - Comments

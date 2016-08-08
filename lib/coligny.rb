@@ -207,8 +207,14 @@ module Coligny
       end
     end
     
+    def test_long_cycle_equos_is_last_year
+      cases = [3,8,13,18]
+      
+      return test_against_cases(cases)
+    end
+    
     def metonic_longcycle_equos_check
-      if ((@year - 3035) % 61 <= 4) && ((@year - 3035) >= 61) && test_equos_days_metonic
+      if ((@year - 3035) % 61 <= 4) && ((@year - 3035) >= 61) && test_long_cycle_equos_is_last_year
         @months.find { |s| s.name == "Equos" }.days = 29
       end
     end
