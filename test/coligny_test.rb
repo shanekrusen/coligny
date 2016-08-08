@@ -55,4 +55,14 @@ class ColignyTest < Minitest::Test
     year = Coligny::ColignyDate.new(3034, "Aedrinni", 30).to_gregorian_date
     assert_equal Date.new(2016, 4, 14), year
   end
+  
+  def test_early_saturn_date
+    year = Coligny::ColignyYear.new(3033)
+    assert_equal true, year.is_early
+  end
+  
+  def test_early_metonic_date
+    year = Coligny::ColignyYear.new(3034, true)
+    assert_equal true, year.is_early
+  end
 end

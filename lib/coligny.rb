@@ -35,7 +35,7 @@ module Coligny
                  ColignyMonth.new("Aedrinni", 30),
                  ColignyMonth.new("Cantlos", 29)]
       
-      is_early
+      is_early?
       
       if !is_metonic           
         populate_saturn_months  
@@ -46,7 +46,7 @@ module Coligny
     
     private
     
-    def is_early
+    def is_early?
       if @is_metonic
         if (@year < 3035)
           @is_early = true 
