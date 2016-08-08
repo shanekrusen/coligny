@@ -94,15 +94,23 @@ module Coligny
       end
     end
     
+    def saturn_cycle_check(difference, years_between_instances, cycle, cycle_remainder)
+      if ((@year - 3034) % difference <= years_between_instances) && ((@year - 3034) >= difference) && ((@year - 3034) & cycle == cycle_remainder)
+        return true
+      else
+        return false
+      end
+    end
+    
     def saturn_longcycle_equos_check
-      if ((@year - 3034) % 198 <= 4) && ((@year - 3034) >= 198) && ((@year - 3034) % 5 == 4)
+      if saturn_cycle_check(198, 4, 5, 4)
         equos = @months.find { |s| s.name == "Equos" }
         equos.days = 29
       end
     end
     
     def saturn_longcycle_int2_check
-      if ((@year - 3034) % 635 <= 29) && ((@year - 3034) >= 635.04) && ((@year - 3034) % 30 == 27)
+      if saturn_cycle_check(635, 29, 30, 27)
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
