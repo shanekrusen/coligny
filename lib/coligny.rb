@@ -62,8 +62,24 @@ module Coligny
       end
     end
     
+    def year_difference
+      if @is_metonic
+       if @is_early
+         return 3035 - @year
+       else
+         return @year - 3035
+       end
+     else
+       if @is_early
+         return 3034 - @year
+       else
+         return @year - 3034
+       end
+     end
+    end
+    
     def populate_saturn_earlier_equos
-      if ((3034 - @year) % 5 == 1) || ((3034 - @year) % 5 == 0)
+      if (year_difference % 5 == 1) || (year_difference % 5 == 0)
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
@@ -71,15 +87,15 @@ module Coligny
     end
     
     def populate_saturn_earlier_int
-      if ((3034 - @year) % 5 == 0) && ((3034 - @year) % 30 != 5)
+      if (year_difference % 5 == 0) && (year_difference % 30 != 5)
         @months.unshift(ColignyMonth.new("Intercalary One", 29))
-      elsif ((3034 - @year) % 5 == 3)
+      elsif (year_difference % 5 == 3)
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
     
     def populate_saturn_later_equos
-      if ((@year - 3034) % 5 == 0) || ((@year - 3034) % 5 == 4)
+      if (year_difference % 5 == 0) || (year_difference % 5 == 4)
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
@@ -87,15 +103,31 @@ module Coligny
     end
     
     def populate_saturn_later_int
-      if ((@year - 3034) % 5 == 0) 
+      if (year_difference % 5 == 0) 
         @months.unshift(ColignyMonth.new("Intercalary One", 29))
-      elsif ((@year - 3034) % 5 == 2) && ((@year - 3034) % 30 != 27)
+      elsif (year_difference % 5 == 2) && (year_difference % 30 != 27)
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
     
+    def identify_year_locator(difference, years_between_instances)
+      if @is_early
+        if ((year_difference) % difference >= years_between_instances) || ((year_difference) % difference == 0)
+          return true
+        else
+          return false
+        end
+      else
+        if ((year_difference) % difference <= years_between_instances)
+          return true
+        else
+          return false
+        end
+      end
+    end
+    
     def saturn_cycle_check(difference, years_between_instances, cycle, cycle_remainder)
-      if ((@year - 3034) % difference <= years_between_instances) && ((@year - 3034) >= difference) && ((@year - 3034) & cycle == cycle_remainder)
+      if identify_year_locator(difference, years_between_instances) && ((year_difference) >= difference) && ((year_difference) & cycle == cycle_remainder)
         return true
       else
         return false
@@ -114,11 +146,26 @@ module Coligny
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
-      
+    
+    def saturn_reverse_longcycle_equos_check
+      if saturn_cycle_check(198, 194, 5, 1)
+        equos = @months.find { |s| s.name == "Equos" }
+        equos.days = 29
+      end
+    end
+    
+    def saturn_reverse_longcycle_int2_check
+      if saturn_cycle_check(635, 606, 30, 3)
+        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+      end 
+    end
+     
     def populate_saturn_months      
       if @is_early
         populate_saturn_earlier_equos
         populate_saturn_earlier_int
+        saturn_reverse_longcycle_equos_check
+        saturn_reverse_longcycle_int2_check
       else        
         populate_saturn_later_equos
         populate_saturn_later_int
@@ -129,7 +176,7 @@ module Coligny
     
     def test_against_cases(cases)
       cases.each do |test|
-        if ((@year - 3035) % 19) == test
+        if (year_difference % 19) == test
           return true
         end
       end
@@ -153,32 +200,23 @@ module Coligny
       
       return test_against_cases(cases)
     end
-    
-    def earlier_than_start_date_test_cases(cases)
-      cases.each do |test|
-        if ((3035 - @year) % 19) == test
-          return true
-        end
-      end
-      return false
-    end
-    
+
     def test_earlier_than_start_equos_days_metonic
       cases = [1,5,6,10,11,15,16]
       
-      return earlier_than_start_date_test_cases(cases)
+      return test_against_cases(cases)
     end
     
     def test_earlier_than_start_date_intone_metonic
       cases = [5,10,15]
       
-      return earlier_than_start_date_test_cases(cases)
+      return test_against_cases(cases)
     end
     
     def test_earlier_than_start_date_inttwo_metonic
       cases = [3,8,13,18]
       
-      return earlier_than_start_date_test_cases(cases)
+      return test_against_cases(cases)
     end
     
     def populate_metonic_equos
@@ -201,20 +239,42 @@ module Coligny
       end
     end
     
+    def metonic_longcycle_year_check(frequency_of_adjustment, case_limiter)
+      if @is_early
+        if ((year_difference % frequency_of_adjustment >= case_limiter) || (year_difference % frequency_of_adjustment == 0)) && (year_difference >= frequency_of_adjustment)
+          return true
+        else
+          return false
+        end
+      else
+        if (year_difference % frequency_of_adjustment <= case_limiter) && (year_difference >= frequency_of_adjustment)
+          return true
+        else
+          return false
+        end
+      end
+    end
+    
     def metonic_longcycle_int2_check
-      if ((@year - 3035) % 6569 <= 4) && ((@year - 3035) >= 6569) && (@months[6].name = "Intercalary Two")
+      if metonic_longcycle_year_check(6569, 4) && (@months[6].name = "Intercalary Two")
         @months.delete_at(6)
       end
     end
     
-    def test_long_cycle_equos_is_last_year
-      cases = [3,8,13,18]
-      
-      return test_against_cases(cases)
+    def metonic_longcycle_equos_check
+      if metonic_longcycle_year_check(61, 4) && test_earlier_than_start_date_inttwo_metonic
+        @months.find { |s| s.name == "Equos" }.days = 29
+      end
     end
     
-    def metonic_longcycle_equos_check
-      if ((@year - 3035) % 61 <= 4) && ((@year - 3035) >= 61) && test_long_cycle_equos_is_last_year
+    def metonic_longcycle_reverse_int2_check
+      if metonic_longcycle_year_check(6569, 6565) && (@months[6].name = "Intercalary Two")
+        @months.delete_at(6)
+      end
+    end
+    
+    def metonic_longcycle_reverse_equos_check
+      if metonic_longcycle_year_check(61, 57) && test_inttwo_metonic
         @months.find { |s| s.name == "Equos" }.days = 29
       end
     end
@@ -224,7 +284,10 @@ module Coligny
       populate_metonic_int1
       populate_metonic_int2
       
-      if @year >= 3035             
+      if @is_early
+        metonic_longcycle_reverse_int2_check
+        metonic_longcycle_reverse_equos_check
+      else
         metonic_longcycle_int2_check 
         metonic_longcycle_equos_check       
       end
