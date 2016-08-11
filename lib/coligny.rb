@@ -254,7 +254,7 @@ module Coligny
     end
     
     def metonic_longcycle_equos_check
-      if metonic_longcycle_year_check(61, 4) && test_earlier_than_start_date_inttwo_metonic
+      if (metonic_longcycle_year_check(61, 4) && test_earlier_than_start_date_inttwo_metonic) || (metonic_longcycle_year_check(61, 57) && test_inttwo_metonic)
         @months.find { |s| s.name == "Equos" }.days = 29
       end
     end
@@ -265,23 +265,16 @@ module Coligny
       end
     end
     
-    def metonic_longcycle_reverse_equos_check
-      if metonic_longcycle_year_check(61, 57) && test_inttwo_metonic
-        @months.find { |s| s.name == "Equos" }.days = 29
-      end
-    end
-    
     def populate_metonic_months
       populate_metonic_equos
       populate_metonic_int1
       populate_metonic_int2
+      metonic_longcycle_equos_check
       
       if @is_early
         metonic_longcycle_reverse_int2_check
-        metonic_longcycle_reverse_equos_check
       else
-        metonic_longcycle_int2_check 
-        metonic_longcycle_equos_check       
+        metonic_longcycle_int2_check        
       end
     end
   end
