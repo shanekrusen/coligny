@@ -78,34 +78,22 @@ module Coligny
      end
     end
     
-    def populate_saturn_earlier_equos
-      if (year_difference % 5 == 1) || (year_difference % 5 == 0)
+    def populate_saturn_equos
+      if (@is_early && ((year_difference % 5 == 1) || (year_difference % 5 == 0))) || (!@is_early && ((year_difference % 5 == 0) || (year_difference % 5 == 4)))
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
       end
     end
     
-    def populate_saturn_earlier_int
-      if (year_difference % 5 == 0) && (year_difference % 30 != 5)
+    def populate_saturn_int1
+      if year_difference % 5 == 0
         @months.unshift(ColignyMonth.new("Intercalary One", 29))
-      elsif (year_difference % 5 == 3)
-        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
     
-    def populate_saturn_later_equos
-      if (year_difference % 5 == 0) || (year_difference % 5 == 4)
-        @months.insert(8, ColignyMonth.new("Equos", 30))
-      else
-        @months.insert(8, ColignyMonth.new("Equos", 29))
-      end
-    end
-    
-    def populate_saturn_later_int
-      if (year_difference % 5 == 0) 
-        @months.unshift(ColignyMonth.new("Intercalary One", 29))
-      elsif (year_difference % 5 == 2) && (year_difference % 30 != 27)
+    def populate_saturn_int2
+      if (@is_early && (year_difference % 5 == 3) && (year_difference % 19 != 3)) || (!@is_early && (year_difference % 5 == 2) && (year_difference % 30 != 27))
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
@@ -135,9 +123,16 @@ module Coligny
     end
     
     def saturn_longcycle_equos_check
-      if saturn_cycle_check(198, 4, 5, 4)
-        equos = @months.find { |s| s.name == "Equos" }
-        equos.days = 29
+      if @is_early
+        if saturn_cycle_check(198, 194, 5, 1)
+          equos = @months.find { |s| s.name == "Equos" }
+          equos.days = 29
+        end
+      else
+        if saturn_cycle_check(198, 4, 5, 4)
+          equos = @months.find { |s| s.name == "Equos" }
+          equos.days = 29
+        end 
       end
     end
     
@@ -147,29 +142,21 @@ module Coligny
       end
     end
     
-    def saturn_reverse_longcycle_equos_check
-      if saturn_cycle_check(198, 194, 5, 1)
-        equos = @months.find { |s| s.name == "Equos" }
-        equos.days = 29
-      end
-    end
-    
     def saturn_reverse_longcycle_int2_check
       if saturn_cycle_check(635, 606, 30, 3)
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end 
     end
      
-    def populate_saturn_months      
+    def populate_saturn_months 
+      populate_saturn_equos
+      populate_saturn_int1
+      populate_saturn_int2
+      saturn_longcycle_equos_check
+           
       if @is_early
-        populate_saturn_earlier_equos
-        populate_saturn_earlier_int
-        saturn_reverse_longcycle_equos_check
         saturn_reverse_longcycle_int2_check
       else        
-        populate_saturn_later_equos
-        populate_saturn_later_int
-        saturn_longcycle_equos_check
         saturn_longcycle_int2_check
       end
     end
@@ -239,19 +226,27 @@ module Coligny
       end
     end
     
+    def metonic_longcycle_early_year_check(frequency_of_adjustment, case_limiter)
+      if ((year_difference % frequency_of_adjustment >= case_limiter) || (year_difference % frequency_of_adjustment == 0)) && (year_difference >= frequency_of_adjustment)
+        return true
+      else
+        return false
+      end
+    end
+
+    def metonic_longcycle_late_year_check(frequency_of_adjustment, case_limiter)
+      if (year_difference % frequency_of_adjustment <= case_limiter) && (year_difference >= frequency_of_adjustment)
+        return true
+      else
+        return false
+      end
+    end
+    
     def metonic_longcycle_year_check(frequency_of_adjustment, case_limiter)
       if @is_early
-        if ((year_difference % frequency_of_adjustment >= case_limiter) || (year_difference % frequency_of_adjustment == 0)) && (year_difference >= frequency_of_adjustment)
-          return true
-        else
-          return false
-        end
+        return metonic_longcycle_early_year_check(frequency_of_adjustment, case_limiter)
       else
-        if (year_difference % frequency_of_adjustment <= case_limiter) && (year_difference >= frequency_of_adjustment)
-          return true
-        else
-          return false
-        end
+        return metonic_longcycle_late_year_check(frequency_of_adjustment, case_limiter)
       end
     end
     
