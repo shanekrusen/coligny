@@ -64,22 +64,26 @@ module Coligny
     
     def year_difference
       if @is_metonic
-       if @is_early
-         return 3035 - @year
-       else
-         return @year - 3035
-       end
-     else
-       if @is_early
-         return 3034 - @year
-       else
-         return @year - 3034
-       end
-     end
+        if @is_early
+          return 3035 - @year     
+        else
+          return @year - 3035
+        end
+      else
+        if @is_early
+          return 3034 - @year
+        else
+          return @year - 3034
+        end
+      end
     end
     
     def populate_saturn_equos
-      if (@is_early && ((year_difference % 5 == 1) || (year_difference % 5 == 0))) || (!@is_early && ((year_difference % 5 == 0) || (year_difference % 5 == 4)))
+      if @is_early
+        if (year_difference % 5 == 1) || (year_difference % 5 == 0) 
+          @months.insert(8, ColignyMonth.new("Equos", 30))
+        end
+      elsif (year_difference % 5 == 0) || (year_difference % 5 == 4)
         @months.insert(8, ColignyMonth.new("Equos", 30))
       else
         @months.insert(8, ColignyMonth.new("Equos", 29))
@@ -123,16 +127,9 @@ module Coligny
     end
     
     def saturn_longcycle_equos_check
-      if @is_early
-        if saturn_cycle_check(198, 194, 5, 1)
-          equos = @months.find { |s| s.name == "Equos" }
-          equos.days = 29
-        end
-      else
-        if saturn_cycle_check(198, 4, 5, 4)
-          equos = @months.find { |s| s.name == "Equos" }
-          equos.days = 29
-        end 
+      if (@is_early && saturn_cycle_check(198, 194, 5, 1)) || (!@is_early && saturn_cycle_check(198, 4, 5, 4))
+        equos = @months.find { |s| s.name == "Equos" }
+        equos.days = 29
       end
     end
     
