@@ -96,18 +96,20 @@ module Coligny
       end
     end
     
-    def saturn_pop_int2_check 
-      if (@is_early && (year_difference % 5 == 3) && (year_difference % 19 != 3)) || (!@is_early && (year_difference % 5 == 2) && (year_difference % 30 != 27))
+    def populate_saturn_int2_check(cycle_repeat, cycle_limit, exception_cycle, exception_limit)
+      if (year_difference % cycle_repeat == cycle_limit) && (year_difference % exception_cycle != exception_limit)
         return true
+      else
+        return false
       end
     end
     
-    def populate_saturn_int2
-      if saturn_pop_int2_check
+    def populate_saturn_int2 
+      if (@is_early && populate_saturn_int2_check(5, 3, 30, 3)) || (!@is_early && populate_saturn_int2_check(5, 2, 30, 27))
         @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
       end
     end
-    
+        
     def identify_year_locator(difference, years_between_instances)
       if @is_early
         if ((year_difference) % difference >= years_between_instances) || ((year_difference) % difference == 0)
