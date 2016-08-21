@@ -260,7 +260,7 @@ module Coligny
     end
     
     def metonic_longcycle_int2_check
-      if metonic_longcycle_year_check(6569, 4) && (@months[6].name = "Intercalary Two")
+      if metonic_longcycle_year_check(6569, 4) && (@months[6].name == "Intercalary Two")
         @months.delete_at(6)
       end
     end
@@ -272,7 +272,7 @@ module Coligny
     end
     
     def metonic_longcycle_reverse_int2_check
-      if metonic_longcycle_year_check(6569, 6565) && (@months[6].name = "Intercalary Two")
+      if metonic_longcycle_year_check(6569, 6565) && (@months[6].name == "Intercalary Two")
         @months.delete_at(6)
       end
     end
