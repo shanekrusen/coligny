@@ -1,23 +1,26 @@
 # Copyright 2016 @shanekrusen 
 # License MIT (https://opensource.org/licenses/MIT)
 
-require "coligny/version"
+require "./lib/coligny/version"
 
 module Coligny
   require 'date'
   
+  #Adds ColignyMonth object, which has a name and number of days.
   class ColignyMonth
     attr_reader :name
     attr_accessor :days
     
+    #Populate these attributes when the instance of ColignyMonth is created.
     def initialize(name, days)
       @name = name
       @days = days
     end
   end
   
+  #Adds ColignyYearClass, which has attributes year, months(an array of ColignyMonth instances) and 
   class ColignyYear
-    attr_accessor :months, :days 
+    attr_accessor :months
     attr_reader :is_early
     
     def initialize(year, is_metonic=false)
@@ -82,6 +85,8 @@ module Coligny
       if @is_early
         if (year_difference % 5 == 1) || (year_difference % 5 == 0) 
           @months.insert(8, ColignyMonth.new("Equos", 30))
+        else
+          @months.insert(8, ColignyMonth.new("Equos", 29))
         end
       elsif (year_difference % 5 == 0) || (year_difference % 5 == 4)
         @months.insert(8, ColignyMonth.new("Equos", 30))
@@ -136,8 +141,7 @@ module Coligny
     
     def saturn_longcycle_equos_check
       if (@is_early && saturn_cycle_check(198, 194, 5, 1)) || (!@is_early && saturn_cycle_check(198, 4, 5, 4))
-        equos = @months.find { |s| s.name == "Equos" }
-        equos.days = 29
+        @months.find { |s| s.name == "Equos" }.days = 29
       end
     end
     
