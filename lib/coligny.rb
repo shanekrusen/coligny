@@ -1,7 +1,7 @@
 # Copyright 2016 @shanekrusen 
 # License MIT (https://opensource.org/licenses/MIT)
 
-require "./lib/coligny/version"
+require "coligny/version"
 
 module Coligny
   require 'date'
