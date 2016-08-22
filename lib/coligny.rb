@@ -1,7 +1,7 @@
 # Copyright 2016 @shanekrusen 
 # License MIT (https://opensource.org/licenses/MIT)
 
-require "coligny/version"
+# require "coligny/version"
 
 module Coligny
   require 'date'
@@ -28,7 +28,7 @@ module Coligny
       @year = year    
       @months = [ColignyMonth.new("Samonios", 30), 
                  ColignyMonth.new("Dumanios", 29), 
-                 ColignyMonth.new("Rivros", 30), 
+                 ColignyMonth.new("Riuros", 30), 
                  ColignyMonth.new("Anagantios", 29), 
                  ColignyMonth.new("Ogronios", 30),
                  ColignyMonth.new("Cutios", 30),
@@ -97,7 +97,7 @@ module Coligny
     
     def populate_saturn_int1
       if year_difference % 5 == 0
-        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+        @months.unshift(ColignyMonth.new("Quimonios", 29))
       end
     end
     
@@ -111,7 +111,7 @@ module Coligny
     
     def populate_saturn_int2 
       if (@is_early && populate_saturn_int2_check(5, 3, 30, 3)) || (!@is_early && populate_saturn_int2_check(5, 2, 30, 27))
-        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+        @months.insert(6, ColignyMonth.new("Rantaranos", 30))
       end
     end
         
@@ -147,13 +147,13 @@ module Coligny
     
     def saturn_longcycle_int2_check
       if saturn_cycle_check(635, 29, 30, 27)
-        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+        @months.insert(6, ColignyMonth.new("Rantaranos", 30))
       end
     end
     
     def saturn_reverse_longcycle_int2_check
       if saturn_cycle_check(635, 606, 30, 3)
-        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+        @months.insert(6, ColignyMonth.new("Rantaranos", 30))
       end 
     end
      
@@ -225,13 +225,13 @@ module Coligny
     
     def populate_metonic_int1
       if (@is_early && test_earlier_than_start_date_intone_metonic) || (!@is_early && test_intone_metonic)
-        @months.unshift(ColignyMonth.new("Intercalary One", 29))
+        @months.unshift(ColignyMonth.new("Quimonios", 29))
       end      
     end
     
     def populate_metonic_int2
       if (@is_early && test_earlier_than_start_date_inttwo_metonic) || (!@is_early && test_inttwo_metonic)
-        @months.insert(6, ColignyMonth.new("Intercalary Two", 30))
+        @months.insert(6, ColignyMonth.new("Rantaranos", 30))
       end
     end
     
@@ -260,7 +260,7 @@ module Coligny
     end
     
     def metonic_longcycle_int2_check
-      if metonic_longcycle_year_check(6569, 4) && (@months[6].name == "Intercalary Two")
+      if metonic_longcycle_year_check(6569, 4) && (@months[6].name == "Rantaranos")
         @months.delete_at(6)
       end
     end
@@ -272,7 +272,7 @@ module Coligny
     end
     
     def metonic_longcycle_reverse_int2_check
-      if metonic_longcycle_year_check(6569, 6565) && (@months[6].name == "Intercalary Two")
+      if metonic_longcycle_year_check(6569, 6565) && (@months[6].name == "Rantaranos")
         @months.delete_at(6)
       end
     end
@@ -380,7 +380,7 @@ module Coligny
       if @is_metonic
         start = ColignyDate.new(3035, "Samonios", 1, true)
       else
-        start = ColignyDate.new(3034, "Intercalary One", 1)
+        start = ColignyDate.new(3034, "Quimonios", 1)
       end  
       
       if (@year < @start_year)
@@ -406,7 +406,7 @@ module Coligny
         end_date = Date.new(self.year, self.month, self.mday)
         difference = (end_date - start).to_i
         
-        start_coligny = ColignyDate.new(3034, "Intercalary One", 1)
+        start_coligny = ColignyDate.new(3034, "Quimonios", 1)
         start_coligny.calc_days(difference)
         return start_coligny
       end
