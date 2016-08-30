@@ -1,7 +1,7 @@
 # Copyright 2016 @shanekrusen 
 # License MIT (https://opensource.org/licenses/MIT)
 
-# require "coligny/version"
+require "coligny/version"
 
 module Coligny
   require 'date'
@@ -51,13 +51,13 @@ module Coligny
     
     def is_early?
       if @is_metonic
-        if (@year < 3035)
+        if (@year < 4999)
           @is_early = true 
         else
           @is_early = false
         end
       else
-        if (@year < 3034)
+        if (@year < 4998)
           @is_early = true 
         else
           @is_early = false
@@ -68,15 +68,15 @@ module Coligny
     def year_difference
       if @is_metonic
         if @is_early
-          return 3035 - @year     
+          return 4999 - @year     
         else
-          return @year - 3035
+          return @year - 4999
         end
       else
         if @is_early
-          return 3034 - @year
+          return 4998 - @year
         else
-          return @year - 3034
+          return @year - 4998
         end
       end
     end
@@ -299,12 +299,12 @@ module Coligny
       @year = year
       @day = day
       if @is_metonic
-        @start_year = 3035
-        @start_date = Date.new(2016, 5, 14)
+        @start_year = 4999
+        @start_date = Date.new(1999, 5, 22)
         @months = ColignyYear.new(year, true).months
       else
-        @start_year = 3034
-        @start_date = Date.new(2015, 4, 26)
+        @start_year = 4998
+        @start_date = Date.new(1998, 5, 3)
         @months = ColignyYear.new(year).months
       end
       @month = @months.find { |s| s.name == month }
@@ -378,9 +378,9 @@ module Coligny
   
     def to_gregorian_date   
       if @is_metonic
-        start = ColignyDate.new(3035, "Samonios", 1, true)
+        start = ColignyDate.new(4999, "Samonios", 1, true)
       else
-        start = ColignyDate.new(3034, "Quimonios", 1)
+        start = ColignyDate.new(4998, "Quimonios", 1)
       end  
       
       if (@year < @start_year)
@@ -394,19 +394,19 @@ module Coligny
   Date.class_eval do
     def to_coligny_date(is_metonic=false)    
       if is_metonic
-        start = Date.new(2016, 5, 14)
+        start = Date.new(1999, 5, 22)
         end_date = Date.new(self.year, self.month, self.mday)
         difference = (end_date - start).to_i
         
-        start_coligny = ColignyDate.new(3035, "Samonios", 1, true)
+        start_coligny = ColignyDate.new(4999, "Samonios", 1, true)
         start_coligny.calc_days(difference)
         return start_coligny
       else
-        start = Date.new(2015, 4, 26)
+        start = Date.new(1998, 5, 3)
         end_date = Date.new(self.year, self.month, self.mday)
         difference = (end_date - start).to_i
         
-        start_coligny = ColignyDate.new(3034, "Quimonios", 1)
+        start_coligny = ColignyDate.new(4998, "Quimonios", 1)
         start_coligny.calc_days(difference)
         return start_coligny
       end
