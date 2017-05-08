@@ -1,6 +1,3 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-
 require 'test_helper'
 
 # class ColignyTest < Minitest::Test
